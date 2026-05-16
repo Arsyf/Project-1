@@ -20,3 +20,16 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        livenessProbe: # Kendi kendini iyileştirme testi (Yaşıyor mu?)
+          httpGet:
+            path: /index.html
+            port: 80
+          initialDelaySeconds: 5 # Pod açıldıktan sonra 5 saniye bekle, sonra test et
+          periodSeconds: 5       # Her 5 saniyede bir kontrol et
+        readinessProbe: # Trafik alma testi (Hazır mı?)
+          httpGet:
+            path: /index.html
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
