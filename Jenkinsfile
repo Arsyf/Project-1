@@ -32,11 +32,12 @@ pipeline {
 
         stage('K8s Deploy') {
             steps {
-                // YAML dosyasındaki geçici yazıyı o anki dinamik build numarasıyla değiştiriyoruz
+                // Önce dinamik build numarasını deployment'a yazıyoruz
                 sh "sed -i 's/BUILD_NUMBER_TAG/${BUILD_NUMBER}/g' deployment.yaml"
                 
-                // Kubernetes artık her seferinde yeni bir imaj ismi görecek ve podları güncelleyecek!
+                // Hem podları hem de dış kapıyı (servisi) Kubernetes'e uyguluyoruz
                 sh "kubectl apply -f deployment.yaml"
+                sh "kubectl apply -f service.yaml"
             }
         }
     }
