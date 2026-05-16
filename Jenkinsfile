@@ -36,7 +36,7 @@ pipeline {
                 sh "sed -i 's/BUILD_NUMBER_TAG/${BUILD_NUMBER}/g' deployment.yaml"
                 
                 // Hem podları hem de dış kapıyı (servisi) Kubernetes'e uyguluyoruz
-                sh "kubectl apply -f deployment.yaml"
+                sh "kubectl apply -f deployment.yaml --record=true"
                 sh "kubectl apply -f service.yaml"
             }
         }
