@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nginx-web
-        image: devarsyf/ilk-uygulamam:BUILD_NUMBER_TAG
+        image: devarsyf/ilk-uygulamam:v999
         imagePullPolicy: Always
         ports:
         - containerPort: 80
