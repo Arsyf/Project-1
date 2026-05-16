@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benim-k8s-app
+  labels:
+    app: web
+spec:
+  replicas: 2  # Uygulamadan aynı anda 2 adet canlı kopya (Pod) çalışacak!
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx-web
+        image: devarsyf/ilk-uygulamam:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
