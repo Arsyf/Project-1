@@ -15,7 +15,8 @@ pipeline {
 
         stage('Build & Tag') {
             steps {
-                sh "docker build -t ${DOCKER_HUB_USER}/ilk-uygulamam:latest ."
+                // İmajı build numarasıyla etiketliyoruz (Örn: ilk-uygulamam:5)
+                sh "docker build -t ${DOCKER_HUB_USER}/ilk-uygulamam:${BUILD_NUMBER} ."
             }
         }
 
@@ -23,14 +24,18 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKER_CRED_ID}", passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
                     sh "echo \$DOCKER_HUB_PASSWORD | docker login -u \$DOCKER_HUB_USERNAME --password-stdin"
-                    sh "docker push ${DOCKER_HUB_USER}/ilk-uygulamam:latest"
+                    // Build numaralı imajı buluta fırlatıyoruz
+                    sh "docker push ${DOCKER_HUB_USER}/ilk-uygulamam:${BUILD_NUMBER}"
                 }
             }
         }
 
         stage('K8s Deploy') {
             steps {
-                // Kubernetes'e YAML dosyasını uygulamasını söylüyoruz
+                // YAML dosyasındaki geçici yazıyı o anki dinamik build numarasıyla değiştiriyoruz
+                sh "sed -i 's/BUILD_NUMBER_TAG/${BUILD_NUMBER}/g' deployment.yaml"
+                
+                // Kubernetes artık her seferinde yeni bir imaj ismi görecek ve podları güncelleyecek!
                 sh "kubectl apply -f deployment.yaml"
             }
         }
