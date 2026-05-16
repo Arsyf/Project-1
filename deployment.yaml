@@ -5,7 +5,7 @@ metadata:
   labels:
     app: web
 spec:
-  replicas: 2  # Uygulamadan aynı anda 2 adet canlı kopya (Pod) çalışacak!
+  replicas: 3  # Uygulamadan aynı anda 2 adet canlı kopya (Pod) çalışacak!
   selector:
     matchLabels:
       app: web
